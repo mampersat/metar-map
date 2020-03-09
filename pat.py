@@ -20,7 +20,7 @@ while True:
 
     # seconds since the device was powered on
     # devided to increment every 1/4 of a second
-    t = int(utime.ticks_ms() / 10)
+    t = int(utime.ticks_ms() / 250)
 
     for i in range(0, lights):
 
@@ -30,14 +30,19 @@ while True:
         # Calculate the value of the i_prime digit
         v = int(t / pow(3, i_prime)) % 3
 
-        r = (v == 0) * level
-        g = (v == 1) * level
-        b = (v == 2) * level
+        if v == 0:
+            r, g, b = 0, level, 0
+
+        if v == 1:
+            r, g, b = level, level, level
+
+        if v == 2:
+            r, g, b = level, int(level / 2), 0
 
         np[i] = (r, g, b)
 
     np.write()
-""" monitor_main.
+""" monitor_main.py
 Blink ternary counting pattern on neopixels
 Designed for a strip of neopixels on the back of a monitor
 0 = red

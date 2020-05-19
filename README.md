@@ -5,10 +5,22 @@ Time for this neopixel based stuff to all live here
 
 ## Things to install
 * picocom
+
+```
+sudo apt-get install picocom
+```
+
 * ampy
-amp
+
+```
+sudo apt-get install python3-pip
+pip3 install adafruit-ampy
+```
+
+## WEBRepl Connection
+
+[http://micropython.org/webrepl/#192.168.1.103:8266/](http://micropython.org/webrepl/#192.168.1.103:8266/)
+
 ## Mac Commands
 Terminal connection
 ```picocom /dev/tty.SLAB_USBtoUART -b 115200```
-
-send code

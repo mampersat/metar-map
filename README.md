@@ -24,3 +24,11 @@ pip3 install adafruit-ampy
 ## Mac Commands
 Terminal connection
 ```picocom /dev/tty.SLAB_USBtoUART -b 115200```
+
+## Flash pixel for identifying airport -> pixel mapping
+>>> def flash(i):
+...     np[i] = (255,255,255)
+...     np.write()
+...     time.sleep(1)
+...     np[i] = (0,0,0)
+...     np.write()

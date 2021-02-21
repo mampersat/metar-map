@@ -13,17 +13,22 @@ flight_category_rgb = {
     'LIFR': (125, 0, 125),  # magenta
     'IFR': (125, 0, 0), # red
     'MVFR': (0, 0, 200), # blue
-    'VFR': (0, 125, 0), # green
+    'VFR': (0, 50, 0), # green
     }
 
-API_URL = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?" \
-    "dataSource=metars&requestType=retrieve&format=csv&hoursBeforeNow=5&mostRecentForEachStation=true&" \
-    "stationString="
+def get_metars(airport_pixel: dict):
+    """ Calls API and update neopixels.
 
-API_URL += ','.join(list(airport_pixel))
+    Args:
+        airport_pixel: Dictionary mapping airport ICAO codes to pixel index
+    """
 
-def get_metars():
-    """ Calls API and update neopixels. """
+    API_URL = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?" \
+        "dataSource=metars&requestType=retrieve&format=csv&hoursBeforeNow=5&mostRecentForEachStation=true&" \
+        "stationString="
+
+    API_URL += ','.join(list(airport_pixel))
+
     response = requests.get(API_URL)
     print(response.text)
     response_split = response.text.split('\n')
@@ -35,6 +40,9 @@ def get_metars():
     # The first 5 lines of the CSV contain headers etc
     for i in range(6, 6 + len(airport_pixel)):
         metar = response_split[i].split(',')
+
+        print('parseing metar')
+        print(metar)
 
         station_id = metar[1]
         flight_category = metar[30]
@@ -55,7 +63,12 @@ def flash(i: int):
     np[i] = (0,0,0)
     np.write()
 
+# Split airport_pixel dictionary in 1/2 due to micropython response size handling
+airport_pixel_1 = dict(list(airport_pixel.items())[len(airport_pixel)//2:])
+airport_pixel_2 = dict(list(airport_pixel.items())[:len(airport_pixel)//2])
+
 """ Main loop """
 while True:
-    get_metars()
+    get_metars(airport_pixel_1)
+    get_metars(airport_pixel_2)
     time.sleep(600)

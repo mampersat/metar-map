@@ -9,11 +9,13 @@ import urequests as requests
 lights = max(airport_pixel.values()) +1
 np = neopixel.NeoPixel(machine.Pin(neopixel_pin), lights)
 
+level = 30
+
 flight_category_rgb = {
-    'LIFR': (125, 0, 125),  # magenta
-    'IFR': (125, 0, 0), # red
-    'MVFR': (0, 0, 200), # blue
-    'VFR': (0, 50, 0), # green
+    'LIFR': (level, 0, level),  # magenta
+    'IFR': (level, 0, 0), # red
+    'MVFR': (0, 0, level), # blue
+    'VFR': (0, level, 0), # green
     }
 
 def get_metars(airport_pixel: dict):
@@ -57,18 +59,26 @@ def flash(i: int):
     Args: 
         i: index of neopixel to flash
     """
-    np[i] = (255,255,255)
+    np[i] = (25,25,25)
     np.write()
     time.sleep(1)
     np[i] = (0,0,0)
     np.write()
 
 # Split airport_pixel dictionary in 1/2 due to micropython response size handling
-airport_pixel_1 = dict(list(airport_pixel.items())[len(airport_pixel)//2:])
-airport_pixel_2 = dict(list(airport_pixel.items())[:len(airport_pixel)//2])
+# TODO instead of splitting, loop with a modulus of 10 or so
+# airport_pixel_1 = dict(list(airport_pixel.items())[len(airport_pixel)//2:])
+# airport_pixel_2 = dict(list(airport_pixel.items())[:len(airport_pixel)//2])
+
+def clear():
+    for i in range(lights):
+        np[i] = (0,0,0)
+    np.write()
+
 
 """ Main loop """
 while True:
-    get_metars(airport_pixel_1)
-    get_metars(airport_pixel_2)
+    get_metars(airport_pixel)
+    # get_metars(airport_pixel_2)
+    
     time.sleep(600)

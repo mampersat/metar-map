@@ -11,8 +11,8 @@ import neopixel
 import utime
 
 pin = 14
-lights = 48
-level = 10
+lights = 100
+level = 255
 
 np = neopixel.NeoPixel(machine.Pin(pin), lights)
 

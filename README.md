@@ -21,14 +21,24 @@ pip3 install adafruit-ampy
 
 [http://micropython.org/webrepl/#192.168.1.103:8266/](http://micropython.org/webrepl/#192.168.1.103:8266/)
 
-## Mac Commands
-Terminal connection
-```picocom /dev/tty.SLAB_USBtoUART -b 115200```
+## Commands
+Terminal connection MAC
+```
+picocom /dev/tty.SLAB_USBtoUART -b 115200
+```
 
-## Flash pixel for identifying airport -> pixel mapping
->>> def flash(i):
-...     np[i] = (255,255,255)
-...     np.write()
-...     time.sleep(1)
-...     np[i] = (0,0,0)
-...     np.write()
+Terminal connection linux
+```
+picocom /dev/ttyUSB0 -b 115200
+```
+
+Transfer main.py to board
+```
+ampy -p /dev/ttyUSB0 put main.py
+```
+
+## URL to test API stuff
+https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=5&mostRecentForEachStation=true&stationString=KBTV
+
+Map: https://www.aviationweather.gov/metar
+

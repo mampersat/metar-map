@@ -42,3 +42,12 @@ https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=met
 
 Map: https://www.aviationweather.gov/metar
 
+## Credits / Examples
+
+[@prueker](https://slingtsi.rueker.com/making-a-led-powered-metar-map-for-your-wall/)
+* Might be the original - contains blog post with lots of discussion
+* Raspberry pi based
+* Large scale - uses actual sectional
+
+[@flynnguy](https://github.com/flynnguy/metar-map)
+* ESP8266 based

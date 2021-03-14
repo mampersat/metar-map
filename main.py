@@ -6,7 +6,9 @@ import neopixel
 import time
 import urequests as requests
 
-lights = max(airport_pixel.values()) +1
+# It's useful to test a longer strip periodically, so just init to 100
+# lights = max(airport_pixel.values()) +1
+lights = 100
 np = neopixel.NeoPixel(machine.Pin(neopixel_pin), lights)
 
 level = 30
@@ -19,7 +21,7 @@ flight_category_rgb = {
     }
 
 def get_metars(airport_pixel: dict):
-    """ Calls API and update neopixels.
+    """ Call API and update neopixels.
 
     Args:
         airport_pixel: Dictionary mapping airport ICAO codes to pixel index
@@ -54,7 +56,7 @@ def get_metars(airport_pixel: dict):
     np.write()
 
 def flash(i: int):
-    """ Flashes a single pixel to help identify airports. 
+    """ Flash a single pixel to help identify airports. 
     
     Args: 
         i: index of neopixel to flash
@@ -64,6 +66,19 @@ def flash(i: int):
     time.sleep(1)
     np[i] = (0,0,0)
     np.write()
+
+def test_all():
+    """ Test all pixels. """
+    for color in [(32,0,0), (0,32,0), (0,0,32)]:
+        last = 0
+        for pixel in range(lights):
+            np[last] = (0,0,0)
+            np[pixel] = color
+            np.write()
+            time.sleep(0.02)
+            last = pixel
+        np[last] = (0,0,0)
+
 
 # Split airport_pixel dictionary in 1/2 due to micropython response size handling
 # TODO instead of splitting, loop with a modulus of 10 or so
@@ -77,6 +92,10 @@ def clear():
 
 
 """ Main loop """
+# test the neopixel strip first
+print('Test pixels')
+test_all()
+
 while True:
     get_metars(airport_pixel)
     # get_metars(airport_pixel_2)

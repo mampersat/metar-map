@@ -5,11 +5,15 @@ import machine
 import neopixel
 import time
 import urequests as requests
+import utime
+import math
 
 # It's useful to test a longer strip periodically, so just init to 100
 # lights = max(airport_pixel.values()) +1
 lights = 100
+
 np = neopixel.NeoPixel(machine.Pin(neopixel_pin), lights)
+airport_metar = {}
 
 level = 30
 
@@ -34,7 +38,7 @@ def get_metars(airport_pixel: dict):
     API_URL += ','.join(list(airport_pixel))
 
     response = requests.get(API_URL)
-    print(response.text)
+    # print(response.text)
     response_split = response.text.split('\n')
 
     # If iterating on code that doesn't need live data - maybe not call the API so much    
@@ -45,15 +49,37 @@ def get_metars(airport_pixel: dict):
     for i in range(6, 6 + len(airport_pixel)):
         metar = response_split[i].split(',')
 
-        print('parseing metar')
-        print(metar)
+        try:
+            station_id = metar[1]
+            flight_category = metar[30]
+            wind_gust_kt = metar[9]
+            pixel = airport_pixel[station_id]
 
-        station_id = metar[1]
-        flight_category = metar[30]
-        pixel = airport_pixel[station_id]
-        color = flight_category_rgb[flight_category]
+            print(station_id, pixel, flight_category, wind_gust_kt)
+
+            color = flight_category_rgb[flight_category]
+
+            airport_metar[station_id] = (pixel, color, wind_gust_kt)
+        except:
+            print('error parsing metar', metar)
+        
+def update_pixels():
+    for code in airport_metar:
+        pixel = airport_metar[code][0]
+        color = airport_metar[code][1]
+        gust = airport_metar[code][2]
+
+        # pulse between 0.5 and 1.0
+        pulse = (math.sin(utime.ticks_ms()/300)+1)
+        pulse = 0.5 + (pulse) /4
+
+        if gust:
+            color = [int(rgb * pulse) for rgb in color]
+        
         np[pixel] = color
+
     np.write()
+
 
 def flash(i: int):
     """ Flash a single pixel to help identify airports. 
@@ -69,6 +95,7 @@ def flash(i: int):
 
 def test_all():
     """ Test all pixels. """
+    print('Test pixels')
     for color in [(32,0,0), (0,32,0), (0,0,32)]:
         last = 0
         for pixel in range(lights):
@@ -93,11 +120,12 @@ def clear():
 
 """ Main loop """
 # test the neopixel strip first
-print('Test pixels')
-test_all()
+# test_all()
 
 while True:
     get_metars(airport_pixel)
-    # get_metars(airport_pixel_2)
+    update_pixels()
     
-    time.sleep(600)
+    start = time.time()
+    while (time.time() - start) < 60:
+        update_pixels()

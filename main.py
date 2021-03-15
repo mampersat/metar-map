@@ -51,9 +51,11 @@ def get_metars(airport_pixel: dict):
         station_id = metar[1]
         flight_category = metar[30]
         pixel = airport_pixel[station_id]
+
         color = flight_category_rgb[flight_category]
         np[pixel] = color
     np.write()
+
 
 def flash(i: int):
     """ Flash a single pixel to help identify airports. 
@@ -67,17 +69,17 @@ def flash(i: int):
     np[i] = (0,0,0)
     np.write()
 
+
 def test_all():
     """ Test all pixels. """
     for color in [(32,0,0), (0,32,0), (0,0,32)]:
-        last = 0
         for pixel in range(lights):
-            np[last] = (0,0,0)
+            np[(pixel-5)%lights] = (0,0,0)
             np[pixel] = color
             np.write()
             time.sleep(0.02)
-            last = pixel
-        np[last] = (0,0,0)
+
+
 
 
 # Split airport_pixel dictionary in 1/2 due to micropython response size handling

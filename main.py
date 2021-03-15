@@ -69,8 +69,11 @@ def update_pixels():
         color = airport_metar[code][1]
         gust = airport_metar[code][2]
 
+        freq = 300
+        freq = freq - int(gust) *5
+
         # pulse between 0.5 and 1.0
-        pulse = (math.sin(utime.ticks_ms()/300)+1)
+        pulse = (math.sin(utime.ticks_ms()/freq)+1)
         pulse = 0.5 + (pulse) /4
 
         if gust:

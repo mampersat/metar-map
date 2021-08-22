@@ -37,8 +37,11 @@ def get_metars(airport_pixel: dict):
 
     API_URL += ','.join(list(airport_pixel))
 
-    response = requests.get(API_URL)
-    # print(response.text)
+    try:
+        response = requests.get(API_URL)
+    except:
+        return
+
     response_split = response.text.split('\n')
 
     # If iterating on code that doesn't need live data - maybe not call the API so much    
@@ -69,14 +72,14 @@ def update_pixels():
         color = airport_metar[code][1]
         gust = airport_metar[code][2]
 
-        freq = 300
-        freq = freq - int(gust) *5
-
-        # pulse between 0.5 and 1.0
-        pulse = (math.sin(utime.ticks_ms()/freq)+1)
-        pulse = 0.5 + (pulse) /4
-
         if gust:
+            freq = 300
+            freq = freq - int(gust) *5
+
+            # pulse between 0.5 and 1.0
+            pulse = (math.sin(utime.ticks_ms()/freq)+1)
+            pulse = 0.5 + (pulse) /4
+
             color = [int(rgb * pulse) for rgb in color]
         
         np[pixel] = color
@@ -112,8 +115,8 @@ def test_all():
 
 # Split airport_pixel dictionary in 1/2 due to micropython response size handling
 # TODO instead of splitting, loop with a modulus of 10 or so
-# airport_pixel_1 = dict(list(airport_pixel.items())[len(airport_pixel)//2:])
-# airport_pixel_2 = dict(list(airport_pixel.items())[:len(airport_pixel)//2])
+airport_pixel_1 = dict(list(airport_pixel.items())[len(airport_pixel)//2:])
+airport_pixel_2 = dict(list(airport_pixel.items())[:len(airport_pixel)//2])
 
 def clear():
     for i in range(lights):
@@ -126,7 +129,8 @@ def clear():
 # test_all()
 
 while True:
-    get_metars(airport_pixel)
+    get_metars(airport_pixel_1)
+    get_metars(airport_pixel_2)
     update_pixels()
     
     start = time.time()

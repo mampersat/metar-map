@@ -36,6 +36,14 @@ Terminal connection linux
 picocom /dev/ttyUSB0 -b 115200
 ```
 
+WiFi connection setup [directions](https://docs.micropython.org/en/latest/esp8266/tutorial/network_basics.html)
+```
+import network
+sta_if = network.WLAN(network.STA_IF)
+sta_if.active(True)
+sta_if.connect('<your SSID>', '<your key>')
+```
+
 Transfer main.py to board
 ```
 ampy -p /dev/ttyUSB0 put main.py

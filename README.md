@@ -1,5 +1,5 @@
 # Metar Map
-Neopixels embedded into a map showing live aviation METAR information from aviationweather.com's API
+Neopixels embedded into a map showing live aviation METAR information from aviationweather.gov's API
 
 ![framed image](images/framed.jpg)
 

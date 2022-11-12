@@ -69,3 +69,16 @@ Map: https://www.aviationweather.gov/metar
 
 [@flynnguy](https://github.com/flynnguy/metar-map)
 * ESP8266 based
+
+# 2022-11-12 Updates
+
+Trying to resolve device restarts every few min. Seems to happen after url call
+Reflashed with MicroPython v1.18 on 2022-01-17; ESP module (1M) with ESP8266
+
+Had a problem uploading with ampy with v1.19 of micropython
+
+Had to install urequests library on esp8266 (after <establish a network connection as a station>)
+```
+import upip
+upip.install('urequests')
+```

@@ -49,6 +49,12 @@ Transfer main.py to board
 ampy -p /dev/ttyUSB0 put main.py
 ```
 
+Reset from picocom
+```
+import machine
+machine.reset()
+```
+
 ## URL to test API stuff
 https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=5&mostRecentForEachStation=true&stationString=KBTV
 

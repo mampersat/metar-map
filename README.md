@@ -82,3 +82,5 @@ Had to install urequests library on esp8266 (after <establish a network connecti
 import upip
 upip.install('urequests')
 ```
+
+![framed image](images/metar_map_inside_case.jpg)

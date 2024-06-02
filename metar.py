@@ -22,9 +22,12 @@ flight_category_rgb = {
     'VFR': (0, 255, 0), # green
     }
 
+'''
 API_URL = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?" \
     "dataSource=metars&requestType=retrieve&format=csv&hoursBeforeNow=5&mostRecentForEachStation=true&" \
     "stationString="
+'''
+API_URL = "https://aviationweather.gov/cgi-bin/data/metar.php?ids="
 
 API_URL += ','.join(list(airport_pixel))
 
@@ -37,7 +40,10 @@ def get_metars():
     response_split = test_response.split('\n')
 
     for i in range(6, 6 + len(airports)):
-        metar = response_split[i].split(',')
+        metar = response_split[i].split(' ') # 2024-01-13 changed from comma to space
+
+        print('Metar:')
+        print(metar)
 
         station_id = metar[1]
         flight_category = metar[30]

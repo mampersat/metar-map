@@ -1,5 +1,5 @@
 # Neopixel configuration
-neopixel_pin = 14
+neopixel_pin = 28
 
 # airports configuration
 

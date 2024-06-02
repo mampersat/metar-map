@@ -21,6 +21,11 @@ Neopixels embedded into a map showing live aviation METAR information from aviat
 
 [Flashing instructions](https://docs.micropython.org/en/latest/esp8266/tutorial/intro.html)
 
+```
+esptool.py --port /dev/ttyUSB1 erase_flash
+esptool.py --port /dev/ttyUSB1 --baud 460800 write_flash --flash_size=detect 0 ESP8266_GENERIC-20240110-v1.23.0-preview.36.gbd21820b4.bin 
+```
+
 picocom install
 ```
 sudo apt-get install picocom
@@ -84,3 +89,5 @@ upip.install('urequests')
 ```
 
 ![framed image](images/metar_map_inside_case.jpg)
+
+

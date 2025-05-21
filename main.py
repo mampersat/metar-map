@@ -72,13 +72,16 @@ def get_metars(airport_pixel: dict):
     metars = response.text.split("<METAR>")
 
     for metar in metars[1::]:
-        flight_category = extract_tag(metar, "flight_category")
-        wind_speed_kt = extract_tag(metar, "wind_speed_kt", 0)
-        station_id = extract_tag(metar, "station_id")
-        pixel = airport_pixel[station_id]
-        color = flight_category_rgb[flight_category]
-        airport_metar[station_id] = (pixel, color, wind_speed_kt)
-        print(f"station_id = {station_id} \t pixel = {pixel} \t flight_category = {flight_category} \t wind_speed_kt = {wind_speed_kt}")
+        try:
+            flight_category = extract_tag(metar, "flight_category")
+            wind_speed_kt = extract_tag(metar, "wind_speed_kt", 0)
+            station_id = extract_tag(metar, "station_id")
+            pixel = airport_pixel[station_id]
+            color = flight_category_rgb[flight_category]
+            airport_metar[station_id] = (pixel, color, wind_speed_kt)
+            print(f"station_id = {station_id} \t pixel = {pixel} \t flight_category = {flight_category} \t wind_speed_kt = {wind_speed_kt}")
+        except Exception as e:
+            print(f"problem parsing metar: {e} \n {metar}")
 
     return
 
